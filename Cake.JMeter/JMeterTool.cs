@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.IO;
@@ -34,11 +35,21 @@ namespace Cake.JMeter
                 sb.Append("-n");
             }
 
-            sb.Append("-t " + settings.SourceJMX);
+            sb.Append("-t " + settings.TestFile);
 
-            if (settings.TargetJTL != null)
+            if (settings.LogFile != null)
             {
-                sb.Append("-l " + settings.TargetJTL);
+                sb.Append("-l " + settings.LogFile);
+            }
+
+            if (settings.GenerateReports)
+            {
+                sb.Append("-e");
+            }
+
+            if (settings.ReportOutput != null)
+            {
+                sb.Append("-o " + settings.ReportOutput);
             }
 
             Run(settings, sb);

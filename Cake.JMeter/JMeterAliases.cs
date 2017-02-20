@@ -28,13 +28,19 @@ namespace Cake.JMeter
         [CakeMethodAlias]
         public static void JMeter(this ICakeContext context, FilePath sourceJmx, FilePath targetJtl, bool showGui)
         {
-            var runner = new JMeterTool(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
-            runner.RunJMeter(new JMeterSettings
+            JMeter(context, new JMeterSettings
             {
-                SourceJMX = sourceJmx,
-                TargetJTL = targetJtl,
+                TestFile = sourceJmx,
+                LogFile = targetJtl,
                 ShowGUI = showGui
             });
+        }
+
+        [CakeMethodAlias]
+        public static void JMeter(this ICakeContext context, JMeterSettings settings)
+        {
+            var runner = new JMeterTool(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
+            runner.RunJMeter(settings);
         }
     }
 }
