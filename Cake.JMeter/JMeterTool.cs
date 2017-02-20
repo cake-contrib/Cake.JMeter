@@ -30,7 +30,7 @@ namespace Cake.JMeter
         protected internal void RunJMeter(JMeterSettings settings)
         {
             var sb = new ProcessArgumentBuilder();
-            if (!settings.ShowGUI)
+            if (!settings.ShowGui)
             {
                 sb.Append("-n");
             }
