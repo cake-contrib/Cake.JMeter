@@ -1,4 +1,14 @@
-build:
-  ps: .\build.ps1
+build_script:
+  - ps: .\build.ps1
 
+# Tests
 test: off
+
+branches:
+  # Whitelist
+  only:
+    - master
+    - /feature/.*/
+
+cache:
+- Tools -> build.cake
