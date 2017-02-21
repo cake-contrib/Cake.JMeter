@@ -1,6 +1,4 @@
-﻿using Cake.Core;
-using Cake.Testing;
-using Cake.Testing.Fixtures;
+﻿using Cake.Testing.Fixtures;
 
 namespace Cake.JMeter.Tests
 {
