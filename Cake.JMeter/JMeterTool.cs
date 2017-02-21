@@ -35,11 +35,11 @@ namespace Cake.JMeter
                 sb.Append("-n");
             }
 
-            sb.Append("-t " + settings.TestFile);
+            sb.Append("-t " + settings.TestFile.FullPath);
 
             if (settings.LogFile != null)
             {
-                sb.Append("-l " + settings.LogFile);
+                sb.Append("-l " + settings.LogFile.FullPath);
             }
 
             if (settings.GenerateReports)
@@ -49,7 +49,7 @@ namespace Cake.JMeter
 
             if (settings.ReportOutput != null)
             {
-                sb.Append("-o " + settings.ReportOutput);
+                sb.Append("-o " + settings.ReportOutput.FullPath);
             }
 
             Run(settings, sb);

@@ -1,11 +1,13 @@
+environment:
+  nuget_api_token:
+    secure: 0z9yOFGpfQzF7ZsJqzyLj8ckqPIv5FZ7+2TjiCUVR31ewZ7Ah2reiZ9WMubFXwAb
+
 build_script:
   - ps: .\build.ps1
 
-# Tests
 test: off
 
 branches:
-  # Whitelist
   only:
     - master
     - /feature/.*/

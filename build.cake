@@ -1,21 +1,23 @@
-#tool "nuget:?package=NUnit.ConsoleRunner"
+#tool "nuget:?package=xunit.runner.console"
 #tool "nuget:?package=GitVersion.Commandline"
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-string version = null;
+var nugetApiToken = EnvironmentVariable("nuget_api_token");
+
+Cake.Common.Tools.GitVersion.GitVersion version = null;
 
 Task("Restore")
     .Does(() =>
-    {
-        NuGetRestore("Cake.JMeter/Cake.JMeter.sln");
-    });
+{
+    NuGetRestore("Cake.JMeter/Cake.JMeter.sln");
+});
 
 Task("UpdateAssemblyInfo")
     .Does(() => 
 {
-    version = GitVersion(new GitVersionSettings { UpdateAssemblyInfo = true }).NuGetVersionV2;
-    if(AppVeyor.IsRunningOnAppVeyor) AppVeyor.UpdateBuildVersion(version);
+    version = GitVersion(new GitVersionSettings { UpdateAssemblyInfo = true });
+    if (AppVeyor.IsRunningOnAppVeyor) AppVeyor.UpdateBuildVersion(version.NuGetVersionV2);
 });
 
 Task("Clean")
@@ -24,6 +26,7 @@ Task("Clean")
     CleanDirectory("./nuget");
     CleanDirectories("./**/bin");
     CleanDirectories("./**/obj");
+    DeleteFile("./Cake.JMeter.Tests.dll.xml");
 });
 
 Task("Build")
@@ -42,8 +45,14 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() => 
 {
-    // NUnit3("./**/bin/**/*.Tests.dll");
-    // if(AppVeyor.IsRunningOnAppVeyor) AppVeyor.UploadTestResults("./TestResult.xml", AppVeyorTestResultsType.NUnit3);
+    XUnit2("./**/bin/**/*.Tests.dll", new XUnit2Settings {
+        XmlReport = true,
+        OutputDirectory = "."
+    });
+    if (AppVeyor.IsRunningOnAppVeyor) 
+    {
+        AppVeyor.UploadTestResults("./Cake.JMeter.Tests.dll.xml", AppVeyorTestResultsType.XUnit);
+    }
 });
 
 Task("Pack")
@@ -53,7 +62,7 @@ Task("Pack")
     var nuGetPackSettings   = new NuGetPackSettings 
     {
         Id           = "Cake.JMeter",
-        Version      = version,
+        Version      = version.NuGetVersionV2,
         Authors      = new[] {"pitermarx"},
         Description  = "Cake aliases for JMeter. To be used in conjunction with the JMeter tool.",
         ProjectUrl   = new Uri("https://github.com/pitermarx/Cake.JMeter"),
@@ -69,11 +78,31 @@ Task("Pack")
     };
 
     NuGetPack(nuGetPackSettings);
+});
+
+Task("Publish")
+    .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
+    .IsDependentOn("Pack")
+    .Does(() =>
+{
     var file = GetFiles("nuget/*.nupkg").First();
-    if(AppVeyor.IsRunningOnAppVeyor) AppVeyor.UploadArtifact(file);
+    AppVeyor.UploadArtifact(file);
+
+    var tagged = AppVeyor.Environment.Repository.Tag.IsTag && 
+        !string.IsNullOrWhiteSpace(AppVeyor.Environment.Repository.Tag.Name);
+
+    if (tagged)
+    { 
+        // Push the package.
+        NuGetPush(file, new NuGetPushSettings 
+        {
+            Source = "https://www.nuget.org/api/v2/package",
+            ApiKey = nugetApiToken
+        });
+    }
 });
 
 Task("Default")
-    .IsDependentOn("Pack");
+    .IsDependentOn("Publish");
 
 RunTarget(target);
