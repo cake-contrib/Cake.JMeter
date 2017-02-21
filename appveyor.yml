@@ -1,7 +1,9 @@
 environment:
   nuget_api_token:
     secure: 0z9yOFGpfQzF7ZsJqzyLj8ckqPIv5FZ7+2TjiCUVR31ewZ7Ah2reiZ9WMubFXwAb
-
+  coveralls_token:
+    secure: l8hXLUlws9+JDOHAS3Mkh9Cskyk8zJKH2QwgzZpojOvK+JELhhf4WXkhV7hyPVPO
+    
 build_script:
   - ps: .\build.ps1
 

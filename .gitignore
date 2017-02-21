@@ -254,3 +254,4 @@ paket-files/
 tools/
 !tools/package.config
 Cake.JMeter.Tests.dll.xml
+Coverage.xml

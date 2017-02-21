@@ -1,24 +1,18 @@
-#tool "nuget:?package=xunit.runner.console"
-#tool "nuget:?package=GitVersion.Commandline"
+#tool "nuget:?package=xunit.runner.console&version=2.1.0"
+#tool "nuget:?package=GitVersion.CommandLine&version=3.6.2"
+#tool "nuget:?package=OpenCover&version=4.6.519"
+#tool "nuget:?package=coveralls.io&version=1.3.4"
+#addin "nuget:?package=Cake.Coveralls&version=0.2.0"
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var nugetApiToken = EnvironmentVariable("nuget_api_token");
+var coverallsToken = EnvironmentVariable("coveralls_token");
 
-Cake.Common.Tools.GitVersion.GitVersion version = null;
-
-Task("Restore")
-    .Does(() =>
-{
-    NuGetRestore("Cake.JMeter/Cake.JMeter.sln");
-});
-
-Task("UpdateAssemblyInfo")
-    .Does(() => 
-{
-    version = GitVersion(new GitVersionSettings { UpdateAssemblyInfo = true });
-    if (AppVeyor.IsRunningOnAppVeyor) AppVeyor.UpdateBuildVersion(version.NuGetVersionV2);
-});
+var version = GitVersion(new GitVersionSettings { UpdateAssemblyInfo = true });
+if (AppVeyor.IsRunningOnAppVeyor) {
+    AppVeyor.UpdateBuildVersion(version.NuGetVersionV2);
+}
 
 Task("Clean")
     .Does(() => 
@@ -28,12 +22,19 @@ Task("Clean")
     CleanDirectories("./**/obj");
     if (FileExists("./Cake.JMeter.Tests.dll.xml"))
         DeleteFile("./Cake.JMeter.Tests.dll.xml");
+    if (FileExists("./Coverage.xml"))
+        DeleteFile("./Coverage.xml");
+});
+
+Task("Restore")
+    .IsDependentOn("Clean")
+    .Does(() =>
+{
+    NuGetRestore("Cake.JMeter/Cake.JMeter.sln");
 });
 
 Task("Build")
-    .IsDependentOn("Clean")
     .IsDependentOn("Restore")
-    .IsDependentOn("UpdateAssemblyInfo")
     .Does(() => 
 {
     MSBuild("Cake.JMeter/Cake.JMeter.sln", configurator =>
@@ -46,13 +47,24 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() => 
 {
-    XUnit2("./**/bin/**/*.Tests.dll", new XUnit2Settings {
-        XmlReport = true,
-        OutputDirectory = "."
-    });
+     OpenCover(tool => 
+        tool.XUnit2("./**/bin/**/*.Tests.dll", new XUnit2Settings {
+            XmlReport = true,
+            NoAppDomain = true,
+            OutputDirectory = "."
+        }),
+        "Coverage.xml",
+        new OpenCoverSettings()
+            .WithFilter("+[*]* -[xunit.*]* -[*.Tests]*")
+    );
+
     if (AppVeyor.IsRunningOnAppVeyor) 
     {
         AppVeyor.UploadTestResults("./Cake.JMeter.Tests.dll.xml", AppVeyorTestResultsType.XUnit);
+        CoverallsIo("Coverage.xml", new CoverallsIoSettings()
+        {
+            RepoToken = coverallsToken
+        });
     }
 });
 

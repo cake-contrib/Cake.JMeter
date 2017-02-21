@@ -35,6 +35,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.2.1.0")]
 [assembly: AssemblyFileVersion("0.2.1.0")]
 
-[assembly: AssemblyInformationalVersion("0.2.1.2-master")]
+[assembly: AssemblyInformationalVersion("0.2.1.0-master")]
 
 [assembly: InternalsVisibleTo("Cake.JMeter.Tests")]
