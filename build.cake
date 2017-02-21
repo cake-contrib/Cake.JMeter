@@ -26,7 +26,8 @@ Task("Clean")
     CleanDirectory("./nuget");
     CleanDirectories("./**/bin");
     CleanDirectories("./**/obj");
-    DeleteFile("./Cake.JMeter.Tests.dll.xml");
+    if (FileExists("./Cake.JMeter.Tests.dll.xml"))
+        DeleteFile("./Cake.JMeter.Tests.dll.xml");
 });
 
 Task("Build")
