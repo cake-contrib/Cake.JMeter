@@ -5,7 +5,7 @@ environment:
     secure: l8hXLUlws9+JDOHAS3Mkh9Cskyk8zJKH2QwgzZpojOvK+JELhhf4WXkhV7hyPVPO
     
 build_script:
-  - ps: .\build.ps1
+  - ps: .\build.ps1 -Verbosity Diagnostic
 
 test: off
 
