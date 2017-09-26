@@ -83,9 +83,9 @@ Task("Pack")
         Tags         = new [] {"cake","jmeter"},
         IconUrl      = new Uri("https://cdn.rawgit.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png"),
         Files        = new [] { 
-            new NuSpecContent { Source = "Cake.JMeter/bin/Release/Cake.JMeter.dll", Target = "lib/net45" },
-            new NuSpecContent { Source = "Cake.JMeter/bin/Release/Cake.JMeter.xml", Target = "lib/net45" },
-            new NuSpecContent { Source = "Cake.JMeter/bin/Release/Cake.JMeter.pdb", Target = "lib/net45" }
+            new NuSpecContent { Source = "Cake.JMeter/bin/Release/Cake.JMeter.dll", Target = "lib\\net46" },
+            new NuSpecContent { Source = "Cake.JMeter/bin/Release/Cake.JMeter.xml", Target = "lib\\net46" },
+            new NuSpecContent { Source = "Cake.JMeter/bin/Release/Cake.JMeter.pdb", Target = "lib\\net46" }
         },
         BasePath        = "./",
         OutputDirectory = "./nuget"
