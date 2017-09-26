@@ -13,6 +13,3 @@ branches:
   only:
     - master
     - /feature/.*/
-
-cache:
-- Tools -> build.cake
