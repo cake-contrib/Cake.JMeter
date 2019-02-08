@@ -1,13 +1,14 @@
-#tool "nuget:?package=xunit.runner.console&version=2.1.0"
+#tool "nuget:?package=xunit.runner.console&version=2.4.1"
 #tool "nuget:?package=GitVersion.CommandLine&version=3.6.5"
 #tool "nuget:?package=OpenCover&version=4.6.519"
-#tool "nuget:?package=coveralls.io&version=1.3.4"
-#addin "nuget:?package=Cake.Coveralls&version=0.7.0"
+#tool "nuget:?package=coveralls.io&version=1.4.2"
+#addin "nuget:?package=Cake.Coveralls&version=0.9.0"
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 var nugetApiToken = EnvironmentVariable("nuget_api_token");
 var coverallsToken = EnvironmentVariable("coveralls_token");
+var slnPath = File("./src/Cake.JMeter.sln");
 
 var version = GitVersion(new GitVersionSettings { UpdateAssemblyInfo = true });
 if (AppVeyor.IsRunningOnAppVeyor) {
@@ -30,32 +31,36 @@ Task("Restore")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    NuGetRestore("Cake.JMeter/Cake.JMeter.sln");
+    DotNetCoreRestore(slnPath);
 });
 
 Task("Build")
     .IsDependentOn("Restore")
     .Does(() => 
 {
-    MSBuild("Cake.JMeter/Cake.JMeter.sln", configurator =>
-        configurator
-            .SetConfiguration(configuration)
-            .SetVerbosity(Verbosity.Minimal));
+    var settings = new DotNetCoreBuildSettings {
+        Configuration = configuration
+    };
+    DotNetCoreBuild(slnPath, settings);
 });
 
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => 
 {
-     OpenCover(tool => 
-        tool.XUnit2("./**/bin/**/*.Tests.dll", new XUnit2Settings {
-            XmlReport = true,
-            NoAppDomain = true,
-            OutputDirectory = "."
-        }),
+    var testSettings = new DotNetCoreTestSettings {
+        Configuration = configuration,
+        NoBuild = true,
+        Logger = "xunit;LogFilePath=../../Cake.JMeter.Tests.dll.xml",
+        //Verbosity = DotNetCoreVerbosity.Normal,
+        ArgumentCustomization = args=>args.Append("-v=normal"), // Workaround until the Verbosity works correctly
+    };
+    OpenCover(tool => 
+        tool.DotNetCoreTest("src/Cake.JMeter.Tests/Cake.JMeter.Tests.csproj", testSettings),
         "Coverage.xml",
-        new OpenCoverSettings()
-            .WithFilter("+[*]* -[xunit.*]* -[*.Tests]*")
+        new OpenCoverSettings {
+            OldStyle = true // See https://github.com/OpenCover/opencover/issues/789
+        }.WithFilter("+[*]* -[xunit.*]* -[*.Tests]*")
     );
 
     if (AppVeyor.IsRunningOnAppVeyor) 
@@ -83,9 +88,9 @@ Task("Pack")
         Tags         = new [] {"cake","jmeter"},
         IconUrl      = new Uri("https://cdn.rawgit.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png"),
         Files        = new [] { 
-            new NuSpecContent { Source = "Cake.JMeter/bin/Release/Cake.JMeter.dll", Target = "lib\\net46" },
-            new NuSpecContent { Source = "Cake.JMeter/bin/Release/Cake.JMeter.xml", Target = "lib\\net46" },
-            new NuSpecContent { Source = "Cake.JMeter/bin/Release/Cake.JMeter.pdb", Target = "lib\\net46" }
+            new NuSpecContent { Source = "src/Cake.JMeter/bin/Release/netstandard2.0/Cake.JMeter.dll", Target = "lib\\netstandard2.0" },
+            new NuSpecContent { Source = "src/Cake.JMeter/bin/Release/netstandard2.0/Cake.JMeter.xml", Target = "lib\\netstandard2.0" },
+            new NuSpecContent { Source = "src/Cake.JMeter/bin/Release/netstandard2.0/Cake.JMeter.pdb", Target = "lib\\netstandard2.0" }
         },
         BasePath        = "./",
         OutputDirectory = "./nuget"
