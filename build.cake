@@ -38,7 +38,10 @@ Task("Build")
     .IsDependentOn("Restore")
     .Does(() => 
 {
-    DotNetCoreBuild(slnPath);
+    var settings = new DotNetCoreBuildSettings {
+        Configuration = configuration
+    };
+    DotNetCoreBuild(slnPath, settings);
 });
 
 Task("Test")
