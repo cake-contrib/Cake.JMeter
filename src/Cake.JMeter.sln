@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.JMeter", "Cake.JMeter\Cake.JMeter.csproj", "{3AD93390-B513-4433-822E-C316ACBE488F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.JMeter.Tests", "Cake.JMeter.Tests\Cake.JMeter.Tests.csproj", "{392865FE-FD94-4F7C-B349-96FA0986573C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3AD93390-B513-4433-822E-C316ACBE488F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AD93390-B513-4433-822E-C316ACBE488F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AD93390-B513-4433-822E-C316ACBE488F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AD93390-B513-4433-822E-C316ACBE488F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{392865FE-FD94-4F7C-B349-96FA0986573C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{392865FE-FD94-4F7C-B349-96FA0986573C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{392865FE-FD94-4F7C-B349-96FA0986573C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{392865FE-FD94-4F7C-B349-96FA0986573C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B6F48B2-27C8-4599-BE1F-B34618912AF9}
+	EndGlobalSection
+EndGlobal
