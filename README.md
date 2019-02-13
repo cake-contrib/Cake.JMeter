@@ -5,7 +5,11 @@ An extension to Cake to do this
 #addin "nuget:?package=Cake.JMeter"
 #tool "nuget:?package=JMeter&include=./**/*.bat"
 
-JMeter("myTestFile.jmx");
+var jmxProject = "myTestFile.jmx";
+// Install all needed plugins for the project
+JMeterInstallForJmx(jmxProject);
+// Run the project
+JMeter(jmxProject);
 ```
 
 [![Build status](https://img.shields.io/appveyor/ci/pitermarx/cake-jmeter.svg)](https://ci.appveyor.com/project/pitermarx/cake-jmeter)

@@ -7,6 +7,8 @@ namespace Cake.JMeter
 {
     internal class JMeterTool : Tool<JMeterSettings>
     {
+        private readonly ICakeEnvironment _environment;
+
         protected internal JMeterTool(
             IFileSystem fileSystem,
             ICakeEnvironment environment,
@@ -14,6 +16,7 @@ namespace Cake.JMeter
             IToolLocator tools)
             : base(fileSystem, environment, processRunner, tools)
         {
+            _environment = environment;
         }
 
         protected sealed override string GetToolName()
@@ -34,11 +37,11 @@ namespace Cake.JMeter
                 sb.Append("-n");
             }
 
-            sb.Append("-t " + settings.TestFile.FullPath);
+            sb.Append("-t " + settings.TestFile.MakeAbsolute(_environment).FullPath.Quote());
 
             if (settings.LogFile != null)
             {
-                sb.Append("-l " + settings.LogFile.FullPath);
+                sb.Append("-l " + settings.LogFile.MakeAbsolute(_environment).FullPath.Quote());
             }
 
             if (settings.GenerateReports)
@@ -48,7 +51,7 @@ namespace Cake.JMeter
 
             if (settings.ReportOutput != null)
             {
-                sb.Append("-o " + settings.ReportOutput.FullPath);
+                sb.Append("-o " + settings.ReportOutput.MakeAbsolute(_environment).FullPath.Quote());
             }
 
             Run(settings, sb);
