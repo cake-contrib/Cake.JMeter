@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cake.Core.IO;
 using Cake.Core.Tooling;
 
@@ -32,5 +33,11 @@ namespace Cake.JMeter
         /// The -o cmdline parameter directory
         /// </summary>
         public DirectoryPath ReportOutput { get; set; }
+
+        /// <summary>
+        /// Dictionary with local JMeter properties.
+        /// These are the ones passed as "-J[prop_name]=[value]" arguments.
+        /// </summary>
+        public Dictionary<string, object> LocalProperties = new Dictionary<string, object>();
     }
 }
