@@ -59,6 +59,7 @@ Task("Test")
         tool.DotNetCoreTest("src/Cake.JMeter.Tests/Cake.JMeter.Tests.csproj", testSettings),
         "Coverage.xml",
         new OpenCoverSettings {
+            ReturnTargetCodeOffset = 0,
             OldStyle = true // See https://github.com/OpenCover/opencover/issues/789
         }.WithFilter("+[*]* -[xunit.*]* -[*.Tests]*")
     );

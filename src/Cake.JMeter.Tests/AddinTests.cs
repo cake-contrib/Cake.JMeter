@@ -58,7 +58,7 @@ namespace Cake.JMeter.Tests
             fixture.Run();
 
             //assert
-            Assert.Equal("-n -t SomeFile", fixture.ProcessRunner.Results.Single().Args);
+            Assert.Equal("-n -t \"/Working/SomeFile\"", fixture.ProcessRunner.Results.Single().Args);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Cake.JMeter.Tests
             fixture.Run();
 
             //assert
-            Assert.Equal("-n -t SomeFile -l LogFile", fixture.ProcessRunner.Results.Single().Args);
+            Assert.Equal("-n -t \"/Working/SomeFile\" -l \"/Working/LogFile\"", fixture.ProcessRunner.Results.Single().Args);
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace Cake.JMeter.Tests
             fixture.Run();
 
             //assert
-            Assert.Equal("-n -t SomeFile -e -o ReportPath", fixture.ProcessRunner.Results.Single().Args);
+            Assert.Equal("-n -t \"/Working/SomeFile\" -e -o \"/Working/ReportPath\"", fixture.ProcessRunner.Results.Single().Args);
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace Cake.JMeter.Tests
             fixture.Run();
 
             //assert
-            Assert.Equal("-n -t SomeFile -Jprop1=\"text\" -Jprop2=\"10\"", fixture.ProcessRunner.Results.Single().Args);
+            Assert.Equal("-n -t \"/Working/SomeFile\" -Jprop1=\"text\" -Jprop2=\"10\"", fixture.ProcessRunner.Results.Single().Args);
         }
     }
 }
