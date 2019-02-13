@@ -199,7 +199,7 @@ namespace Cake.JMeter
         [CakeMethodAlias]
         public static void JMeterInstallForJmx(this ICakeContext context, FilePath jmxPath)
         {
-            JMeterRunPluginManagerCommand(context, $"install-for-jmx {jmxPath}");
+            JMeterRunPluginManagerCommand(context, $"install-for-jmx {jmxPath.MakeAbsolute(context.Environment).FullPath.Quote()}");
         }
 
         /// <summary>
