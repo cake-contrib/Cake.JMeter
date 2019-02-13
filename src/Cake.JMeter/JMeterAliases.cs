@@ -119,16 +119,16 @@ namespace Cake.JMeter
         /// <code>
         /// <![CDATA[
         /// Task("SomeTask").Does(() => {
-        ///     JMeterInstallPlugin("jpgc-casutg", jMeterPath); // Custom Thread Groups
-        ///     JMeterInstallPlugin("jpgc-graphs-additional", jMeterPath); // 5 Additional Graphs
-        ///     JMeterInstallPlugin("jpgc-graphs-basic", jMeterPath); // 3 Basic Graphs
-        ///     JMeterInstallPlugin("jpgc-graphs-composite", jMeterPath); // Composite Timeline Graph
-        ///     JMeterInstallPlugin("jpgc-graphs-dist", jMeterPath); // Distribution/Percentile Graphs
-        ///     JMeterInstallPlugin("jpgc-mergeresults", jMeterPath); // Merge Results
-        ///     JMeterInstallPlugin("jpgc-dummy", jMeterPath); // Dummy Sampler
-        ///     JMeterInstallPlugin("jpgc-tst", jMeterPath); // Throughput Shaping Timer
-        ///     JMeterInstallPlugin("jpgc-functions", jMeterPath); // Custom JMeter Functions
-        ///     JMeterInstallPlugin("jpgc-cmd", jMeterPath); // Command-Line Graph Plotting Tool
+        ///     JMeterInstallPlugin("jpgc-casutg"); // Custom Thread Groups
+        ///     JMeterInstallPlugin("jpgc-graphs-additional"); // 5 Additional Graphs
+        ///     JMeterInstallPlugin("jpgc-graphs-basic"); // 3 Basic Graphs
+        ///     JMeterInstallPlugin("jpgc-graphs-composite"); // Composite Timeline Graph
+        ///     JMeterInstallPlugin("jpgc-graphs-dist"); // Distribution/Percentile Graphs
+        ///     JMeterInstallPlugin("jpgc-mergeresults"); // Merge Results
+        ///     JMeterInstallPlugin("jpgc-dummy"); // Dummy Sampler
+        ///     JMeterInstallPlugin("jpgc-tst"); // Throughput Shaping Timer
+        ///     JMeterInstallPlugin("jpgc-functions"); // Custom JMeter Functions
+        ///     JMeterInstallPlugin("jpgc-cmd"); // Command-Line Graph Plotting Tool
         /// });
         /// ]]>
         /// </code>
@@ -141,6 +141,65 @@ namespace Cake.JMeter
         public static void JMeterInstallPlugin(this ICakeContext context, string pluginName)
         {
             JMeterRunPluginManagerCommand(context, $"install {pluginName}");
+        }
+
+        /// <summary>
+        /// Uninstalls the given plugin from the JMeter package.
+        /// </summary>
+        /// <example>
+        /// <para>Use the #addin preprocessor directive and the #tool</para>
+        /// <code>
+        /// <![CDATA[
+        /// #tool "nuget:?package=JMeter&version=5.0.0&include=./**/*.bat"
+        /// #addin "nuget:?package=Cake.JMeter"
+        /// ]]>
+        /// </code>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// <![CDATA[
+        /// Task("SomeTask").Does(() => {
+        ///     JMeterUninstallPlugin("jpgc-casutg");
+        /// });
+        /// ]]>
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="pluginName">The name of the plugin to uninstall. Should be the plugin name (ex: jpgc-json).
+        /// Multiple can be uninstalled at once by separating them with a comma.
+        /// </param>
+        [CakeMethodAlias]
+        public static void JMeterUninstallPlugin(this ICakeContext context, string pluginName)
+        {
+            JMeterRunPluginManagerCommand(context, $"uninstall {pluginName}");
+        }
+
+        /// <summary>
+        /// Installs all plugins that are needed to run the given jmx file.
+        /// </summary>
+        /// <example>
+        /// <para>Use the #addin preprocessor directive and the #tool</para>
+        /// <code>
+        /// <![CDATA[
+        /// #tool "nuget:?package=JMeter&version=5.0.0&include=./**/*.bat"
+        /// #addin "nuget:?package=Cake.JMeter"
+        /// ]]>
+        /// </code>
+        /// <para>Cake task:</para>
+        /// <code>
+        /// <![CDATA[
+        /// Task("SomeTask").Does(() => {
+        ///     JMeterInstallForJmx("path/to/project.jmx");
+        /// });
+        /// ]]>
+        /// </code>
+        /// </example>
+        /// <param name="context">The context.</param>
+        /// <param name="jmxPath">The path the the jmx file.
+        /// </param>
+        [CakeMethodAlias]
+        public static void JMeterInstallForJmx(this ICakeContext context, FilePath jmxPath)
+        {
+            JMeterRunPluginManagerCommand(context, $"install-for-jmx {jmxPath}");
         }
 
         /// <summary>
