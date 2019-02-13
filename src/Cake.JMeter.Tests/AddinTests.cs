@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cake.Core.IO;
 using Xunit;
@@ -99,6 +100,29 @@ namespace Cake.JMeter.Tests
 
             //assert
             Assert.Equal("-n -t SomeFile -e -o ReportPath", fixture.ProcessRunner.Results.Single().Args);
+        }
+
+        [Fact]
+        public void WithLocalProperties()
+        {
+            // arrange
+            var fixture = new JMeterToolFixture
+            {
+                Settings = new JMeterSettings
+                {
+                    TestFile = "SomeFile",
+                    LocalProperties = new Dictionary<string, object> {
+                        { "prop1", "text" },
+                        { "prop2", 10 }
+                    }
+                }
+            };
+
+            //act
+            fixture.Run();
+
+            //assert
+            Assert.Equal("-n -t SomeFile -Jprop1=\"text\" -Jprop2=\"10\"", fixture.ProcessRunner.Results.Single().Args);
         }
     }
 }
