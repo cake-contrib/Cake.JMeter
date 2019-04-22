@@ -87,7 +87,7 @@ Task("Pack")
         ProjectUrl   = new Uri("https://github.com/pitermarx/Cake.JMeter"),
         LicenseUrl   = new Uri("https://github.com/pitermarx/Cake.JMeter/blob/master/LICENSE"),
         Tags         = new [] {"cake","jmeter"},
-        IconUrl      = new Uri("https://cdn.rawgit.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png"),
+        IconUrl      = new Uri("https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png"),
         Files        = new [] { 
             new NuSpecContent { Source = "src/Cake.JMeter/bin/Release/netstandard2.0/Cake.JMeter.dll", Target = "lib\\netstandard2.0" },
             new NuSpecContent { Source = "src/Cake.JMeter/bin/Release/netstandard2.0/Cake.JMeter.xml", Target = "lib\\netstandard2.0" },
