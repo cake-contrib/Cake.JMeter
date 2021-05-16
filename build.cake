@@ -82,11 +82,11 @@ Task("Pack")
     {
         Id           = "Cake.JMeter",
         Version      = version.NuGetVersionV2,
-        Authors      = new[] {"pitermarx"},
+        Authors      = new[] { "pitermarx", "augustoproiete" },
         Description  = "Cake aliases for JMeter. To be used in conjunction with the JMeter tool.",
-        ProjectUrl   = new Uri("https://github.com/pitermarx/Cake.JMeter"),
-        LicenseUrl   = new Uri("https://github.com/pitermarx/Cake.JMeter/blob/master/LICENSE"),
-        Tags         = new [] {"cake","jmeter"},
+        ProjectUrl   = new Uri("https://github.com/cake-contrib/Cake.JMeter"),
+        LicenseUrl   = new Uri("https://github.com/cake-contrib/Cake.JMeter/blob/master/LICENSE"),
+        Tags         = new [] { "cake", "jmeter", "cake-addin", "cake-build", "cake-contrib", "addin", "script", "build" },
         IconUrl      = new Uri("https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png"),
         Files        = new [] { 
             new NuSpecContent { Source = "src/Cake.JMeter/bin/Release/netstandard2.0/Cake.JMeter.dll", Target = "lib\\netstandard2.0" },
